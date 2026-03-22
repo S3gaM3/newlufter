@@ -13,7 +13,7 @@ export default defineConfig({
         secure: false,
         cookieDomainRewrite: '',
         configure: (proxy) => {
-          proxy.on('error', (err, _req, _res) => {
+          proxy.on('error', (err) => {
             console.error('[Vite proxy]', err.message)
           })
           proxy.on('proxyRes', (proxyRes, req) => {
