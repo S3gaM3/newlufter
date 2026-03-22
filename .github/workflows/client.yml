@@ -27,31 +27,24 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          BASE_PATH: /
+          BASE_PATH: /${{ github.event.repository.name }}/
 
-      # Раскомментировать для деплоя на GitHub Pages (добавить в build job)
-       - name: Upload artifact
-         if: github.ref == 'refs/heads/main'
-         uses: actions/upload-pages-artifact@v3
-         with:
-           path: dist
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
-  # Раскомментировать для деплоя на GitHub Pages:
-  # 1. Settings → Pages → Build and deployment → Source: GitHub Actions
-  # 2. Раскомментировать Upload artifact в build job
-  # 3. Раскомментировать deploy job ниже
-  # 4. В build env установить BASE_PATH: /${{ github.event.repository.name }}/
-  #
-   deploy:
-     needs: build
-     runs-on: ubuntu-latest
-     if: github.ref == 'refs/heads/main'
-     permissions:
-       pages: write
-       id-token: write
-     environment:
-       name: github-pages
-       url: ${{ steps.deploy.outputs.page_url }}
-     steps:
-       - id: deploy
-         uses: actions/deploy-pages@v4
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
