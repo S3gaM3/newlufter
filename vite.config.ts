@@ -13,7 +13,7 @@ function githubPagesPlugin() {
       try {
         copyFileSync(join(outDir, 'index.html'), join(outDir, '404.html'))
         writeFileSync(join(outDir, '.nojekyll'), '')
-      } catch {}
+      } catch { /* ignore */ }
     },
   }
 }
