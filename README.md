@@ -13,13 +13,13 @@ npm run preview # просмотр собранного
 
 ## Изображения
 
-Для отображения картинок товаров поместите файлы в `public/images/`:
+**Важно:** Файлы в `public/images/` должны быть в репозитории — иначе на GitHub Pages картинки не отобразятся.
 
-- `public/images/logo.png`, `pattern.jpg`, `lyufter_fon.png` и др. (см. `src/constants/site.ts`)
+- `public/images/logo.png`, `pattern.jpg`, `lyufter_fon.png`, `lyufter_fon_mobile.png`, `bg.png` и др. (см. `src/constants/site.ts`)
 - `public/images/disks/{sku}.png` — фото дисков (например `002-125.png`)
-- `public/images/1_sajt_razdely_2.png` — для коронок
+- `public/images/1_sajt_razdely_2.png`, `2_sajt_razdely_2.png` — для коронок и дисков
 
-Опционально: `node scripts/download-images.mjs` — загружает изображения товаров с lufter-tools.ru.
+Запуск `node scripts/download-images.mjs` загружает изображения товаров в `public/images/disks/`. Остальные картинки добавьте вручную.
 
 ## Деплой
 

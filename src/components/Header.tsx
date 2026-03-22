@@ -46,12 +46,12 @@ export function Header({ onFeedbackClick, content }: HeaderProps) {
             >
               {content.headerMenuCrownsLabel}
             </Link>
-            <a
-              href="/#contacts"
+            <Link
+              to="/#contacts"
               className="app-link px-4 py-2 rounded-lg hover:bg-overlay-hover transition-all text-sm font-medium"
             >
               {content.headerMenuContactsLabel}
-            </a>
+            </Link>
             <button
               type="button"
               onClick={onFeedbackClick}
@@ -101,13 +101,13 @@ export function Header({ onFeedbackClick, content }: HeaderProps) {
                 >
                   {content.headerMenuCrownsLabel}
                 </Link>
-                <a
-                  href="/#contacts"
+                <Link
+                  to="/#contacts"
                   className="app-link px-4 py-3 rounded-lg hover:bg-overlay-hover"
                   onClick={() => setOpen(false)}
                 >
                   {content.headerMenuContactsLabel}
-                </a>
+                </Link>
                 <button
                   type="button"
                   onClick={() => {

@@ -3,6 +3,6 @@ const BASE = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '/'
 
 /** Возвращает URL ассета с учётом base path. */
 export function asset(path: string): string {
-  const p = path.startsWith('/') ? path : `/${path}`
-  return BASE + p
+  const p = path.startsWith('/') ? path.slice(1) : path
+  return BASE === '/' ? `/${p}` : `${BASE}/${p}`
 }

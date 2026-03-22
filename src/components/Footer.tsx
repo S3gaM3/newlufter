@@ -151,9 +151,9 @@ export function Footer({ content }: FooterProps) {
           className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted"
         >
           <p>{content.footerCopyright}</p>
-          <a href="/#contacts" className="app-link">
+          <Link to="/#contacts" className="app-link">
             {content.footerContactsLinkLabel}
-          </a>
+          </Link>
         </motion.div>
       </div>
     </footer>
