@@ -1,16 +1,38 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useMatch, useParams } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { getProductImages, type CatalogItem, type ProductCategory } from '@/data/catalog'
 import { useProducts } from '@/hooks/useProducts'
 import { SITE } from '@/constants/site'
 import { ProductWorkVideos } from '@/components/ProductWorkVideos'
 import { usePageSeo } from '@/seo/usePageSeo'
 import { useJsonLd } from '@/seo/useJsonLd'
+import { SafeImage } from '@/components/SafeImage'
 
 const BREADCRUMB: Record<ProductCategory, { path: string; label: string }> = {
   discs: { path: SITE.catalogDiscs, label: 'Алмазные диски' },
   crowns: { path: SITE.catalogCrowns, label: 'Алмазные коронки' },
+}
+
+function renderFormattedDescription(text: string) {
+  return text
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line, idx) => {
+      const isSectionTitle = /^\d+\.\s+/.test(line)
+      if (isSectionTitle) {
+        return (
+          <h3 key={`section-${idx}`} className="font-display font-semibold text-fg text-lg mt-4">
+            {line}
+          </h3>
+        )
+      }
+      return (
+        <p key={`line-${idx}`} className="leading-relaxed text-muted-light">
+          {line}
+        </p>
+      )
+    })
 }
 
 function ProductGallery({
@@ -33,8 +55,9 @@ function ProductGallery({
   if (!images.length) {
     return (
       <div className="aspect-square bg-surface-elevated rounded-2xl flex items-center justify-center p-8">
-        <img
+        <SafeImage
           src={mainImg}
+          fallbackSrc={SITE.fallbackImage}
           alt={product.name}
           loading="lazy"
           decoding="async"
@@ -46,19 +69,15 @@ function ProductGallery({
 
   return (
     <div className="space-y-4">
-      <motion.div
-        key={activeIndex}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="aspect-square bg-surface-elevated rounded-2xl flex items-center justify-center p-8 overflow-hidden"
-      >
-        <img
+      <div className="aspect-square bg-surface-elevated rounded-2xl flex items-center justify-center p-8 overflow-hidden">
+        <SafeImage
           src={images[safeIndex]}
+          fallbackSrc={SITE.fallbackImage}
           alt={`${product.name} — фото ${safeIndex + 1}`}
           decoding="async"
           className="max-w-full max-h-full object-contain"
         />
-      </motion.div>
+      </div>
       {images.length > 1 && (
         <div className="flex gap-2 overflow-x-auto pb-1">
           {images.map((src, i) => (
@@ -72,8 +91,9 @@ function ProductGallery({
                   : 'border-transparent hover:border-muted'
               }`}
             >
-              <img
+              <SafeImage
                 src={src}
+                fallbackSrc={SITE.fallbackImage}
                 alt=""
                 loading="lazy"
                 decoding="async"
@@ -95,10 +115,12 @@ export function ProductDetailPage() {
   const items = category === 'discs' ? discs : crowns
   const product = id ? items.find((p) => p.id === id) : undefined
   const fallbackPath = category === 'crowns' ? SITE.catalogCrowns : SITE.catalogDiscs
+  const fallbackDescription = 'Описание товара уточняется. Свяжитесь с нами для консультации.'
+  const productDescription = product?.fullDescription || product?.description || fallbackDescription
 
   const seoTitle = product ? `${product.name} | LUFTER` : 'Товар не найден | LUFTER'
   const seoDescription = product
-    ? product.fullDescription ?? product.description ?? `${product.name}. Профессиональный инструмент LUFTER.`
+    ? product.fullDescription ?? product.description ?? fallbackDescription
     : 'Запрошенная карточка товара не найдена. Вернитесь в каталог LUFTER.'
   const seoPath = product ? `${BREADCRUMB[category].path}/${product.id}` : fallbackPath
 
@@ -119,7 +141,7 @@ export function ProductDetailPage() {
             name: product.name,
             sku: product.sku,
             description: product.fullDescription ?? product.description ?? product.name,
-            image: product.image ? `${SITE.baseUrl}${product.image}` : undefined,
+            image: `${SITE.baseUrl}${product.image || SITE.fallbackImage}`,
             category: category === 'crowns' ? 'Алмазные коронки' : 'Алмазные диски',
             brand: { '@type': 'Brand', name: 'LUFTER' },
           }
@@ -156,11 +178,7 @@ export function ProductDetailPage() {
   return (
     <main className="flex-1 py-16 lg:py-24">
       <div className="max-w-site mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.nav
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mb-8 flex items-center gap-2 text-sm text-muted-light flex-wrap"
-        >
+        <nav className="mb-8 flex items-center gap-2 text-sm text-muted-light flex-wrap">
           <Link to="/" className="app-link">
             Главная
           </Link>
@@ -170,27 +188,19 @@ export function ProductDetailPage() {
           </Link>
           <span>/</span>
           <span className="text-fg truncate max-w-[200px]">{product.name}</span>
-        </motion.nav>
+        </nav>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="grid lg:grid-cols-2 gap-12 lg:gap-16"
-        >
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           <ProductGallery product={product} category={category} />
 
-          <div>
+          <div className="min-w-0">
             <span className="text-sm text-muted">{product.sku}</span>
             <h1 className="font-display font-bold text-2xl md:text-3xl lg:text-4xl text-fg mt-2">
               {product.name}
             </h1>
 
-            <div className="mt-6 space-y-4 text-muted-light">
-              {product.fullDescription ? (
-                <p className="leading-relaxed">{product.fullDescription}</p>
-              ) : product.description ? (
-                <p className="leading-relaxed">{product.description}</p>
-              ) : null}
+            <div className="mt-6 space-y-3 rounded-2xl border border-border bg-overlay p-5 md:p-6 max-h-[26rem] lg:max-h-[30rem] overflow-y-auto">
+              {renderFormattedDescription(productDescription)}
             </div>
 
             <div className="mt-8 flex flex-wrap gap-4">
@@ -202,7 +212,7 @@ export function ProductDetailPage() {
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         <ProductWorkVideos
           videos={product.workVideos}

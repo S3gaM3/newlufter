@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 import type { CatalogFiltersState } from '@/data/catalogFilters'
 
@@ -53,11 +52,7 @@ export function CatalogToolbar({
   }, [state.page, totalPages])
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="mb-8 space-y-4"
-    >
+    <div className="mb-8 space-y-4">
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <input
@@ -166,6 +161,6 @@ export function CatalogToolbar({
           </nav>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }

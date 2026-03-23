@@ -1,20 +1,7 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { SITE } from '@/constants/site'
 import type { SiteEditableContent } from '@/types/content'
-
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
-}
-
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-}
+import { SafeImage } from '@/components/SafeImage'
 
 interface ProductsProps {
   title: SiteEditableContent['productsTitle']
@@ -36,35 +23,25 @@ export function Products({
   return (
     <section className="py-20 lg:py-28 relative">
       <div className="max-w-site mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          className="mb-16"
-        >
+        <div className="mb-16">
           <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-fg">
             {title}
           </h2>
           <p className="mt-4 text-muted-light text-lg max-w-xl">
             {lead}
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-50px' }}
-          className="grid md:grid-cols-2 gap-6 lg:gap-8"
-        >
-          <motion.article variants={item}>
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+          <article>
             <Link
               to="/katalog-diskov"
               className="group block card glass-hover overflow-hidden h-full no-underline"
             >
               <div className="relative aspect-[16/10] overflow-hidden rounded-xl">
-                <img
+                <SafeImage
                   src={SITE.imgDiscs}
+                  fallbackSrc={SITE.fallbackImage}
                   alt="Алмазные диски"
                   loading="lazy"
                   decoding="async"
@@ -87,16 +64,17 @@ export function Products({
                 </span>
               </div>
             </Link>
-          </motion.article>
+          </article>
 
-          <motion.article variants={item}>
+          <article>
             <Link
               to="/almaznye-koronki"
               className="group block card glass-hover overflow-hidden h-full no-underline"
             >
               <div className="relative aspect-[16/10] overflow-hidden rounded-xl">
-                <img
+                <SafeImage
                   src={SITE.imgCrowns}
+                  fallbackSrc={SITE.fallbackImage}
                   alt="Алмазные коронки"
                   loading="lazy"
                   decoding="async"
@@ -119,8 +97,8 @@ export function Products({
                 </span>
               </div>
             </Link>
-          </motion.article>
-        </motion.div>
+          </article>
+        </div>
       </div>
     </section>
   )

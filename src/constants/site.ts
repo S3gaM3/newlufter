@@ -5,14 +5,16 @@ export const SITE = {
   baseUrl: 'https://lufter-tools.ru',
   phoneDisplay: '8(800)500-58-51',
   phoneTel: 'tel:88005005851',
+  leadEmail: 'info@lufter-tools.ru',
   address: 'г. Москва, Варшавское шоссе, дом 148',
   /** Яндекс.Карты: точка как на виджете карты на сайте */
   addressMapUrl:
     'https://yandex.ru/maps/?pt=37.60253%2C55.60102&z=17&l=map',
   /** Локальные ассеты (asset() учитывает base path для GitHub Pages). WebP для быстрой загрузки. */
+  fallbackImage: asset('/images/placeholder-product.svg'),
   pattern: asset('/images/pattern.webp'),
   logo: asset('/images/logo.webp'),
-  brochure: asset('/buklet_2025_elektronnyj.pdf'),
+  brochure: '',
   /** Баннеры разделов каталога */
   imgDiscs: asset('/images/2_sajt_razdely_2.webp'),
   imgCrowns: asset('/images/1_sajt_razdely_2.webp'),
@@ -51,7 +53,7 @@ export const COPY = {
   features: [
     {
       title: 'БОЛЬШОЙ ВЫБОР',
-      text: 'Широкий ассортимент  оснастки для электроинструмета',
+      text: 'Широкий ассортимент оснастки для электроинструмента',
       iconKey: 'warehouse' as const,
     },
     {

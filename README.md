@@ -1,28 +1,58 @@
-# newlufter — клиент (статический сайт)
+# newlufter — клиентский релиз (статический сайт)
 
-Сайт LUFTER: каталог алмазных дисков и коронок. Полностью клиентская часть, без сервера.
+Клиентская витрина LUFTER: каталог алмазных дисков и коронок, страницы товара, формы заявок.
 
-## Запуск
+Текущий релиз **client-only**: backend в рамках этого релиза не используется.
+
+## Локальный запуск
 
 ```bash
 npm install
-npm run dev    # разработка
-npm run build  # сборка в dist/
-npm run preview # просмотр собранного
+npm run dev
+npm run lint
+npm run build
+npm run preview
 ```
 
-## Изображения (WebP)
+## Что включено в релиз
 
-Картинки в формате WebP для быстрой загрузки.
+- SPA на React + TypeScript + Vite
+- каталоги дисков и коронок
+- карточка товара
+- формы обратной связи с fallback через `mailto`
+- SEO-базис: meta/canonical/robots/sitemap
+- базовые a11y улучшения
 
-- `public/images/logo.webp`, `pattern.webp`, `lyufter_fon.webp`, `lyufter_fon_mobile.webp`, `bg.webp` и др.
-- `public/images/disks/{sku}.webp` — фото дисков
-- `public/images/1_sajt_razdely_2.webp`, `2_sajt_razdely_2.webp` — баннеры каталога
+## Ассеты
 
-**Команды:**
-- `npm run images:download` — загружает фото дисков с lufter-tools.ru и сохраняет как WebP
-- `npm run images:convert` — конвертирует существующие PNG/JPG в `public/images/` в WebP (удаляет оригиналы)
+- Ассеты подключаются из `public/`.
+- Для отсутствующих изображений используется безопасный плейсхолдер, чтобы не было критичных 404 на ключевых маршрутах.
+- Скрипты ассетов:
+  - `npm run images:download`
+  - `npm run images:convert`
+
+## Видео работы
+
+- Клиенты сайта ничего не загружают.
+- Ролики добавляет только администратор, у которого есть доступ к файлам проекта.
+- Допустимые источники:
+  - локальные файлы в `public/videos/...` (ссылки вида `/videos/....mp4`)
+  - внешние `https://` ссылки YouTube/Vimeo
 
 ## Деплой
 
-Собранный `dist/` — статические файлы. GitHub Actions собирает и публикует на GitHub Pages при push в `main`.
+`dist/` публикуется как статика на GitHub Pages через workflow в `.github/workflows/client.yml`.
+
+## Smoke checklist (перед релизом)
+
+- `npm run lint` проходит без ошибок
+- `npm run build` проходит без ошибок
+- открываются маршруты:
+  - `/`
+  - `/katalog-diskov`
+  - `/almaznye-koronki`
+  - `/user/agreement`
+- карточка товара открывается из каждого каталога
+- формы (главная, футер, модалка) открывают почтовый клиент через `mailto`
+- на ключевых экранах нет битых изображений (подставляется плейсхолдер)
+- `robots.txt` и `sitemap.xml` доступны из `public/`

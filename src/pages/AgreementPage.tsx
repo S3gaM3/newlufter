@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { usePageSeo } from '@/seo/usePageSeo'
 
 export function AgreementPage() {
@@ -12,22 +11,15 @@ export function AgreementPage() {
   return (
     <main className="flex-1 py-16 lg:py-24">
       <div className="max-w-site mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
-        <motion.nav
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mb-10 flex items-center gap-2 text-sm text-muted-light"
-        >
+        <nav className="mb-10 flex items-center gap-2 text-sm text-muted-light">
           <Link to="/" className="app-link">
             Главная
           </Link>
           <span>/</span>
           <span className="text-fg">Пользовательское соглашение</span>
-        </motion.nav>
+        </nav>
 
-        <motion.article
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <article>
           <h1 className="font-display font-bold text-2xl md:text-3xl text-fg mb-8">
             Пользовательское соглашение
           </h1>
@@ -55,7 +47,7 @@ export function AgreementPage() {
               г. Москва, Варшавское шоссе, дом 148.
             </p>
           </div>
-        </motion.article>
+        </article>
       </div>
     </main>
   )

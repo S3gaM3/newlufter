@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import type { CatalogItem } from '@/data/catalog'
 import { WorkVideoLightbox } from '@/components/WorkVideoLightbox'
+import { SafeImage } from '@/components/SafeImage'
 
 interface ProductCardProps {
   product: CatalogItem
@@ -30,20 +30,18 @@ export function ProductCard({ product, to, fallbackImage }: ProductCardProps) {
   const [videoOpen, setVideoOpen] = useState(false)
   const videos = product.workVideos
   const hasVideos = Boolean(videos?.length)
+  const description = product.description?.trim() || 'Описание товара уточняется. Свяжитесь с нами для консультации.'
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="group overflow-hidden h-full flex flex-col rounded-2xl border border-border bg-black p-6 lg:p-8 transition-all duration-300 hover:border-border-hover"
-    >
+    <article className="group overflow-hidden h-full flex flex-col rounded-2xl border border-border bg-black p-6 lg:p-8 transition-all duration-300 hover:border-border-hover">
       <div className="relative aspect-square bg-black rounded-xl mb-5 overflow-hidden shrink-0">
         <Link
           to={to}
           className="app-link-reset absolute inset-0 flex items-center justify-center p-6 group/img outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-xl"
         >
-          <img
+          <SafeImage
             src={product.image ?? fallbackImage}
+            fallbackSrc={fallbackImage}
             alt=""
             loading="lazy"
             decoding="async"
@@ -73,9 +71,7 @@ export function ProductCard({ product, to, fallbackImage }: ProductCardProps) {
         <h2 className="font-display font-semibold text-lg app-link-face mt-1">
           {product.name}
         </h2>
-        {product.description && (
-          <p className="text-sm text-muted-light mt-2 line-clamp-2">{product.description}</p>
-        )}
+        <p className="text-sm text-muted-light mt-2 line-clamp-2">{description}</p>
         <span className="mt-auto pt-4 app-link-face font-semibold text-sm group-hover:underline inline-block">
           Подробнее →
         </span>
@@ -89,6 +85,6 @@ export function ProductCard({ product, to, fallbackImage }: ProductCardProps) {
           productName={product.name}
         />
       )}
-    </motion.article>
+    </article>
   )
 }

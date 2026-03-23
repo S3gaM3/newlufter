@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Host: https://lufter-tools.ru
 
 Sitemap: https://lufter-tools.ru/sitemap.xml

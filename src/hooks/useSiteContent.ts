@@ -11,7 +11,7 @@ const content: SiteEditableContent = {
   heroTitle: COPY.heroTitle,
   heroLead: COPY.heroLead,
   heroConsultButtonLabel: 'Получить консультацию',
-  heroBrochureButtonLabel: 'Скачать брошюру',
+  heroBrochureButtonLabel: 'Запросить брошюру',
   productsTitle: 'Предлагаем Вам',
   productsLead: 'Алмазные диски и коронки LUFTER для профессионалов',
   productsDiscsTitle: 'Алмазные диски',

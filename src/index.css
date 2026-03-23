@@ -206,6 +206,55 @@
   .overlay-subtle-hover:hover {
     background-color: var(--color-overlay-hover);
   }
+
+  .preloader-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background-color: var(--color-page-bg);
+  }
+
+  .preloader-logo {
+    width: 180px;
+    height: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+    animation: preloader-fade 1.2s ease-in-out infinite alternate;
+  }
+
+  .preloader-spinner {
+    width: 34px;
+    height: 34px;
+    border-radius: 9999px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--color-accent);
+    animation: preloader-spin 0.9s linear infinite;
+  }
+
+  .preloader-text {
+    color: var(--color-fg-muted-light);
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+  }
+}
+
+@keyframes preloader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes preloader-fade {
+  from {
+    opacity: 0.78;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Custom scrollbar */

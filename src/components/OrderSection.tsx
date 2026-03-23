@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import type { OrderFormData, FormErrors } from '@/types/form'
 import { SITE } from '@/constants/site'
 import type { SiteEditableContent } from '@/types/content'
+import { SafeImage } from '@/components/SafeImage'
 
 interface OrderSectionProps {
   orderData: OrderFormData
@@ -42,8 +42,9 @@ export function OrderSection({
   return (
     <section className="py-20 lg:py-28 relative overflow-hidden" aria-labelledby="order-section-heading">
       {/* Фото склада / фона только для этого блока */}
-      <img
+      <SafeImage
         src={SITE.orderSectionBackground}
+        fallbackSrc={SITE.fallbackImage}
         alt=""
         aria-hidden
         loading="lazy"
@@ -57,12 +58,7 @@ export function OrderSection({
       <div className="absolute inset-0 bg-gradient-mesh opacity-25" aria-hidden />
 
       <div className="relative z-10 max-w-site mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="card max-w-xl mx-auto"
-        >
+        <div className="card max-w-xl mx-auto">
           <h2
             id="order-section-heading"
             className="font-display font-bold text-2xl md:text-3xl text-fg"
@@ -74,13 +70,9 @@ export function OrderSection({
           </p>
 
           {isOrderSuccess ? (
-            <motion.p
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="mt-8 text-accent font-semibold text-lg"
-            >
+            <p className="mt-8 text-accent font-semibold text-lg">
               {content.orderSuccessMessage}
-            </motion.p>
+            </p>
           ) : (
             <form
               className="mt-8 space-y-5"
@@ -99,10 +91,12 @@ export function OrderSection({
                   placeholder={content.orderPhonePlaceholder}
                   value={orderData.phone}
                   onChange={(e) => onOrderFieldChange('phone', e.target.value)}
+                  aria-invalid={Boolean(orderErrors.phone)}
+                  aria-describedby={orderErrors.phone ? 'order-phone-error' : undefined}
                   className={inputClass}
                 />
                 {orderErrors.phone && (
-                  <p className="mt-1.5 text-sm text-red-400">{orderErrors.phone}</p>
+                  <p id="order-phone-error" className="mt-1.5 text-sm text-red-400">{orderErrors.phone}</p>
                 )}
               </div>
               <div>
@@ -119,7 +113,7 @@ export function OrderSection({
                 />
               </div>
               {orderErrors.form && (
-                <p className="mt-1.5 text-sm text-red-400">{orderErrors.form}</p>
+                <p className="mt-1.5 text-sm text-red-400" role="alert">{orderErrors.form}</p>
               )}
               <button
                 type="submit"
@@ -136,7 +130,7 @@ export function OrderSection({
               </p>
             </form>
           )}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

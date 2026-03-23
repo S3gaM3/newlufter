@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion'
 import { COPY, SITE } from '@/constants/site'
 import type { SiteEditableContent } from '@/types/content'
+import { SafeImage } from '@/components/SafeImage'
 
 interface HeroProps {
   onConsultClick: () => void
@@ -18,14 +18,16 @@ export function Hero({
   brochureButtonLabel = 'Скачать брошюру',
 }: HeroProps) {
   const paragraphs = heroLead.split('\n').filter(Boolean)
+  const brochureHref = SITE.brochure || SITE.contacts
 
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden">
       {/* Баннер lyufter_fon: рабочий с болгаркой, искры, логотип LUFTER */}
       <picture className="absolute inset-0 z-0">
         <source media="(max-width: 639px)" srcSet={SITE.heroBannerMobile} />
-        <img
+        <SafeImage
           src={SITE.heroBanner}
+          fallbackSrc={SITE.fallbackImage}
           alt=""
           aria-hidden
           fetchPriority="high"
@@ -44,42 +46,25 @@ export function Hero({
 
       <div className="relative z-10 w-full max-w-site mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
         <div className="max-w-2xl">
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-fg leading-[1.1] tracking-tight drop-shadow-lg"
-          >
+          <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-fg leading-[1.1] tracking-tight drop-shadow-lg">
             {heroTitle}
-          </motion.h1>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-8 text-fg/85 text-lg md:text-xl leading-relaxed max-w-xl space-y-4 drop-shadow-md"
-          >
+          </h1>
+          <div className="mt-8 text-fg/85 text-lg md:text-xl leading-relaxed max-w-xl space-y-4 drop-shadow-md">
             {paragraphs.map((p, i) => (
               <p key={i}>{p.trim()}</p>
             ))}
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-12 flex flex-wrap gap-4"
-          >
+          </div>
+          <div className="mt-12 flex flex-wrap gap-4">
             <button type="button" onClick={onConsultClick} className="btn-primary">
               {consultButtonLabel}
             </button>
             <a
-              href={SITE.brochure}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={brochureHref}
               className="btn-secondary"
             >
               {brochureButtonLabel}
             </a>
-          </motion.div>
+          </div>
         </div>
       </div>
 

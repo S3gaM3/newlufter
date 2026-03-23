@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion'
 import { COPY, SITE } from '@/constants/site'
 import type { SiteEditableContent } from '@/types/content'
+import { SafeImage } from '@/components/SafeImage'
 
 interface AboutUsProps {
   aboutTitle?: SiteEditableContent['aboutTitle']
@@ -19,12 +19,7 @@ export function AboutUs({
     <section className="py-20 lg:py-28">
       <div className="max-w-site mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-col"
-          >
+          <div className="flex flex-col">
             <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-fg leading-tight">
               {aboutTitle}
             </h2>
@@ -33,16 +28,12 @@ export function AboutUs({
                 <p key={i}>{block.trim()}</p>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative min-h-[280px] lg:min-h-[360px] rounded-2xl overflow-hidden border border-border bg-surface-elevated"
-          >
-            <img
+          <div className="relative min-h-[280px] lg:min-h-[360px] rounded-2xl overflow-hidden border border-border bg-surface-elevated">
+            <SafeImage
               src={SITE.aboutPhoto}
+              fallbackSrc={SITE.fallbackImage}
               alt={aboutImageAlt}
               className="absolute inset-0 w-full h-full object-cover object-center"
               loading="lazy"
@@ -52,7 +43,7 @@ export function AboutUs({
               className="absolute inset-0 bg-gradient-to-t from-bg/40 via-transparent to-transparent pointer-events-none"
               aria-hidden
             />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

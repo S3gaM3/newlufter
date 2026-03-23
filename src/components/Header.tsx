@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SITE } from '@/constants/site'
 import type { SiteEditableContent } from '@/types/content'
+import { SafeImage } from '@/components/SafeImage'
 
 interface HeaderProps {
   onFeedbackClick: () => void
@@ -24,8 +25,9 @@ export function Header({ onFeedbackClick, content }: HeaderProps) {
       <div className="max-w-site mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link to="/" className="app-link-reset shrink-0 flex items-center gap-3 group">
-            <img
+            <SafeImage
               src={SITE.logo}
+              fallbackSrc={SITE.fallbackImage}
               alt="LUFTER"
               className="h-8 sm:h-10 w-auto object-contain logo-theme group-hover:opacity-100 transition-opacity"
               width={160}

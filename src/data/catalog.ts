@@ -4,8 +4,9 @@ import { asset } from '@/lib/asset'
  * Catalog data for discs and crowns.
  * Disc images: /images/disks/{sku}.webp
  *
- * Видео работы (workVideos): URL mp4/webm в public (`/videos/...`) или полные ссылки;
+ * Видео работы (workVideos): URL mp4/webm в public (`/videos/...`) или внешние https-ссылки;
  * поддерживаются ссылки YouTube (watch / youtu.be / embed) и Vimeo.
+ * Редактирует только администратор через файлы проекта (пользователь загрузку не выполняет).
  */
 
 export interface CatalogItem {
@@ -50,7 +51,7 @@ function discImage(sku: string): string {
 }
 
 /** Diamond discs - 72 items */
-export const DISCS: CatalogItem[] = [
+const DISCS_RAW: CatalogItem[] = [
   {
     id: '002-125',
     sku: '002-125',
@@ -162,9 +163,55 @@ export const DISCS: CatalogItem[] = [
 ]
 
 /** Diamond crowns - 4 items */
-export const CROWNS: CatalogItem[] = [
+const CROWNS_RAW: CatalogItem[] = [
   { id: '027-70', sku: '027-70', name: 'Алмазная коронка LUFTER 70мм', description: 'Для бурения бетона, кирпича, камня. Сегментная конструкция.', image: asset('/images/1_sajt_razdely_2.webp') },
   { id: '026-68', sku: '026-68', name: 'Алмазная коронка LUFTER 68мм', description: 'Для бурения отверстий в бетоне и армированных конструкциях.', image: asset('/images/1_sajt_razdely_2.webp') },
   { id: '026-72', sku: '026-72', name: 'Алмазная коронка LUFTER 72мм', description: 'Для бурения бетона, керамогранита. Высокая износостойкость.', image: asset('/images/1_sajt_razdely_2.webp') },
   { id: '026-82', sku: '026-82', name: 'Алмазная коронка LUFTER 82мм', description: 'Для бурения отверстий под трубы и коммуникации в твёрдых материалах.', image: asset('/images/1_sajt_razdely_2.webp') },
 ]
+
+function buildLongDescription(item: CatalogItem): string {
+  const sku = item.sku || item.id
+  const title = item.name
+  const base = item.description?.trim() || 'Профессиональный инструмент LUFTER для строительных и монтажных задач.'
+
+  const lines = [
+    `${title} (артикул ${sku}).`,
+    '',
+    '1. Назначение',
+    `${base}`,
+    'Изделие рассчитано на стабильную работу при регулярной профессиональной нагрузке.',
+    '',
+    '2. Основные преимущества',
+    'Оптимальная геометрия режущей кромки и сбалансированный корпус.',
+    'Уверенный старт реза и предсказуемая работа в процессе использования.',
+    '',
+    '3. Сферы применения',
+    'Строительные, отделочные и монтажные работы.',
+    'Подходит для задач на объекте и в мастерской.',
+    '',
+    '4. Рекомендации по использованию',
+    'Перед началом работ проверьте совместимость инструмента с оборудованием.',
+    'Соблюдайте рекомендованные обороты и режим резания для конкретного материала.',
+    '',
+    '5. Безопасность',
+    'Используйте СИЗ: очки, перчатки и защиту органов дыхания.',
+    'Перед заменой оснастки отключайте оборудование от питания.',
+    '',
+    '6. Поддержка и консультация',
+    'Команда LUFTER поможет подобрать оптимальную модель под ваш тип задач.',
+    'Для уточнения характеристик и условий поставки свяжитесь с нами по телефону.',
+  ]
+
+  return lines.join('\n')
+}
+
+function withLongDescriptions(items: CatalogItem[]): CatalogItem[] {
+  return items.map((item) => ({
+    ...item,
+    fullDescription: item.fullDescription?.trim() || buildLongDescription(item),
+  }))
+}
+
+export const DISCS: CatalogItem[] = withLongDescriptions(DISCS_RAW)
+export const CROWNS: CatalogItem[] = withLongDescriptions(CROWNS_RAW)

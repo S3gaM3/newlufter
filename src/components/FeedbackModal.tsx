@@ -89,6 +89,9 @@ export function FeedbackModal({
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ type: 'spring', damping: 25 }}
           className="relative w-full max-w-lg glass rounded-2xl shadow-glow overflow-hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="feedback-modal-title"
         >
           <div className="p-6 lg:p-8">
             <button
@@ -114,7 +117,7 @@ export function FeedbackModal({
               </div>
             ) : (
               <>
-                <h2 className="font-display font-bold text-xl md:text-2xl text-fg mb-2">
+                <h2 id="feedback-modal-title" className="font-display font-bold text-xl md:text-2xl text-fg mb-2">
                   {content.feedbackTitle}
                 </h2>
                 <p className="text-muted-light text-sm mb-6">
@@ -130,33 +133,43 @@ export function FeedbackModal({
                 >
                   <div>
                     <input
+                      id="feedback-name"
                       type="text"
                       placeholder={content.feedbackNamePlaceholder}
                       value={data.name}
                       onChange={(e) => onFieldChange('name', e.target.value)}
+                      autoFocus
+                      aria-invalid={Boolean(errors.name)}
+                      aria-describedby={errors.name ? 'feedback-name-error' : undefined}
                       className={fieldClass}
                     />
-                    {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name}</p>}
+                    {errors.name && <p id="feedback-name-error" className="mt-1 text-sm text-red-400">{errors.name}</p>}
                   </div>
                   <div>
                     <input
+                      id="feedback-phone"
                       type="tel"
                       placeholder={content.feedbackPhonePlaceholder}
                       value={data.phone}
                       onChange={(e) => onFieldChange('phone', e.target.value)}
+                      aria-invalid={Boolean(errors.phone)}
+                      aria-describedby={errors.phone ? 'feedback-phone-error' : undefined}
                       className={fieldClass}
                     />
-                    {errors.phone && <p className="mt-1 text-sm text-red-400">{errors.phone}</p>}
+                    {errors.phone && <p id="feedback-phone-error" className="mt-1 text-sm text-red-400">{errors.phone}</p>}
                   </div>
                   <div>
                     <textarea
+                      id="feedback-comment"
                       placeholder={content.feedbackCommentPlaceholder}
                       value={data.comment}
                       onChange={(e) => onFieldChange('comment', e.target.value)}
                       rows={3}
+                      aria-invalid={Boolean(errors.comment)}
+                      aria-describedby={errors.comment ? 'feedback-comment-error' : undefined}
                       className={`${fieldClass} resize-none min-h-[80px]`}
                     />
-                    {errors.comment && <p className="mt-1 text-sm text-red-400">{errors.comment}</p>}
+                    {errors.comment && <p id="feedback-comment-error" className="mt-1 text-sm text-red-400">{errors.comment}</p>}
                   </div>
                   <div className="space-y-3">
                     <label className="flex items-start gap-3 cursor-pointer text-sm text-muted-light">
@@ -184,9 +197,9 @@ export function FeedbackModal({
                     </label>
                   </div>
                   {(errors.consentPersonal || errors.consentAgreement) && (
-                    <p className="text-sm text-red-400">{errors.consentPersonal || errors.consentAgreement}</p>
+                    <p className="text-sm text-red-400" role="alert">{errors.consentPersonal || errors.consentAgreement}</p>
                   )}
-                  {errors.form && <p className="text-sm text-red-400">{errors.form}</p>}
+                  {errors.form && <p className="text-sm text-red-400" role="alert">{errors.form}</p>}
                   <button
                     type="submit"
                     disabled={isSubmitting}

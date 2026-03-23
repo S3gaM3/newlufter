@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { SITE } from '@/constants/site'
 import { IconPhone, IconPin } from '@/components/icons/SiteIcons'
 import { useFooterLeadForm } from '@/hooks/useFooterLeadForm'
@@ -36,11 +35,7 @@ export function Footer({ content }: FooterProps) {
       <div className="border-t border-border" />
       <div className="max-w-site mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <h2 className="font-display font-bold text-2xl md:text-3xl text-fg mb-8">
               {content.footerContactsTitle}
             </h2>
@@ -63,13 +58,9 @@ export function Footer({ content }: FooterProps) {
                 <span>{SITE.address}</span>
               </a>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <h3 className="font-display font-bold text-xl md:text-2xl text-fg mb-2">
               {content.footerFormTitle}
             </h3>
@@ -87,23 +78,29 @@ export function Footer({ content }: FooterProps) {
               >
                 <div>
                   <input
+                    id="footer-name"
                     type="text"
                     placeholder={content.footerNamePlaceholder}
                     value={data.name}
                     onChange={(e) => updateField('name', e.target.value)}
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? 'footer-name-error' : undefined}
                     className={inputClass}
                   />
-                  {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name}</p>}
+                  {errors.name && <p id="footer-name-error" className="mt-1 text-sm text-red-400">{errors.name}</p>}
                 </div>
                 <div>
                   <input
+                    id="footer-phone"
                     type="tel"
                     placeholder={content.footerPhonePlaceholder}
                     value={data.phone}
                     onChange={(e) => updateField('phone', e.target.value)}
+                    aria-invalid={Boolean(errors.phone)}
+                    aria-describedby={errors.phone ? 'footer-phone-error' : undefined}
                     className={inputClass}
                   />
-                  {errors.phone && <p className="mt-1 text-sm text-red-400">{errors.phone}</p>}
+                  {errors.phone && <p id="footer-phone-error" className="mt-1 text-sm text-red-400">{errors.phone}</p>}
                 </div>
                 <label className="flex items-start gap-3 cursor-pointer text-sm text-muted-light">
                   <input
@@ -129,9 +126,9 @@ export function Footer({ content }: FooterProps) {
                   </span>
                 </label>
                 {(errors.consentPersonal || errors.consentAgreement) && (
-                  <p className="text-sm text-red-400">{errors.consentPersonal || errors.consentAgreement}</p>
+                  <p className="text-sm text-red-400" role="alert">{errors.consentPersonal || errors.consentAgreement}</p>
                 )}
-                {errors.form && <p className="text-sm text-red-400">{errors.form}</p>}
+                {errors.form && <p className="text-sm text-red-400" role="alert">{errors.form}</p>}
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -141,20 +138,15 @@ export function Footer({ content }: FooterProps) {
                 </button>
               </form>
             )}
-          </motion.div>
+          </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted"
-        >
+        <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted">
           <p>{content.footerCopyright}</p>
           <Link to="/#contacts" className="app-link">
             {content.footerContactsLinkLabel}
           </Link>
-        </motion.div>
+        </div>
       </div>
     </footer>
   )

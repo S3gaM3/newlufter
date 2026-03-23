@@ -1,6 +1,7 @@
 import { useEffect, useId } from 'react'
 import { createPortal } from 'react-dom'
 import { WorkVideoPlayer } from '@/components/WorkVideoPlayer'
+import { normalizeWorkVideos } from '@/lib/videoUrls'
 
 interface WorkVideoLightboxProps {
   open: boolean
@@ -11,6 +12,7 @@ interface WorkVideoLightboxProps {
 
 export function WorkVideoLightbox({ open, onClose, videos, productName }: WorkVideoLightboxProps) {
   const titleId = useId()
+  const validVideos = normalizeWorkVideos(videos)
 
   useEffect(() => {
     if (!open) return
@@ -26,7 +28,7 @@ export function WorkVideoLightbox({ open, onClose, videos, productName }: WorkVi
     }
   }, [open, onClose])
 
-  if (!open || !videos.length) return null
+  if (!open || !validVideos.length) return null
 
   const node = (
     <div
@@ -59,7 +61,7 @@ export function WorkVideoLightbox({ open, onClose, videos, productName }: WorkVi
           </button>
         </div>
         <div className="space-y-6">
-          {videos.map((url, i) => (
+          {validVideos.map((url, i) => (
             <WorkVideoPlayer
               key={`${url}-${i}`}
               url={url}

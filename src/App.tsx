@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { TopBar } from '@/components/TopBar'
@@ -8,6 +8,7 @@ import { Footer } from '@/components/Footer'
 import { useFeedbackForm } from '@/hooks/useFeedbackForm'
 import { SeoDefaults } from '@/seo/SeoDefaults'
 import { useSiteContent } from '@/hooks/useSiteContent'
+import { SITE } from '@/constants/site'
 
 const HomePage = lazy(() =>
   import('@/pages/HomePage').then((module) => ({ default: module.HomePage }))
@@ -26,7 +27,21 @@ const AgreementPage = lazy(() =>
 )
 function App() {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false)
+  const [isPageReady, setIsPageReady] = useState(false)
   const content = useSiteContent()
+  const preloadImages = useMemo(
+    () => [
+      SITE.logo,
+      SITE.heroBanner,
+      SITE.heroBannerMobile,
+      SITE.orderSectionBackground,
+      SITE.aboutPhoto,
+      SITE.imgDiscs,
+      SITE.imgCrowns,
+      SITE.pattern,
+    ],
+    []
+  )
 
   const feedbackForm = useFeedbackForm(() => {
     setTimeout(() => setIsFeedbackOpen(false), 2000)
@@ -35,6 +50,43 @@ function App() {
   const openFeedback = () => {
     feedbackForm.reset()
     setIsFeedbackOpen(true)
+  }
+
+  useEffect(() => {
+    let cancelled = false
+
+    const loadImage = (src: string) =>
+      new Promise<void>((resolve) => {
+        const img = new Image()
+        img.onload = () => resolve()
+        img.onerror = () => resolve()
+        img.src = src
+      })
+
+    const timeout = new Promise<void>((resolve) => {
+      window.setTimeout(resolve, 2500)
+    })
+
+    Promise.race([Promise.allSettled(preloadImages.map((src) => loadImage(src))).then(() => undefined), timeout]).then(() => {
+      if (!cancelled) {
+        // Small delay for smoother transition from loader to ready UI.
+        window.setTimeout(() => setIsPageReady(true), 180)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [preloadImages])
+
+  if (!isPageReady) {
+    return (
+      <div className="preloader-screen" role="status" aria-live="polite" aria-label="Загрузка страницы">
+        <img src={SITE.logo} alt="LUFTER" className="preloader-logo" />
+        <div className="preloader-spinner" aria-hidden />
+        <p className="preloader-text">Подготавливаем страницу...</p>
+      </div>
+    )
   }
 
   const basename = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '/'
